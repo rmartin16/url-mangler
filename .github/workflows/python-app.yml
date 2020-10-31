@@ -25,7 +25,7 @@ jobs:
     - name: Install Poetry
       uses: snok/install-poetry@v1.0.0
 
-    - name: Cache Poetry virtualenv
+    - name: Load Cached Environment
       uses: actions/cache@v2
       id: cached-poetry-dependencies
       with:
@@ -34,9 +34,9 @@ jobs:
 
     - name: Install Dependencies
       run: poetry install
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
 
-    - name: Code Quality
+    - name: Code Quality with Black
       run: poetry run black . --check
 
     - name: Lint with flake8
@@ -47,9 +47,6 @@ jobs:
         poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Test with pytest
-      env:
-        DJANGO_SETTINGS_MODULE: url_mangler.settings.settings
-        URLMANGLER_SECRETS_FILE: url_mangler/settings/.confidential/ci.json
       run: poetry run pytest
 
     - name: Upload Coverage to CodeCov
