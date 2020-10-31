@@ -1,0 +1,13 @@
+{
+  "SECRET_KEY": "^gh4f#05w#!0w+9)fkc(xpz8mj$rprjawlt27i__t*yb#d8noq",
+  "ALLOWED_HOSTS": ["*"],
+  "DEBUG": true,
+  "DATABASE": {
+    "ENGINE": "django.db.backends.postgresql_psycopg2",
+    "NAME": "urlmangler",
+    "USER": "urlmangler",
+    "PASSWORD": "urlmangler",
+    "HOST": "localhost",
+    "PORT": ""
+  }
+}
