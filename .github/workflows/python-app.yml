@@ -50,9 +50,9 @@ jobs:
       env:
         DJANGO_SETTINGS_MODULE: url_mangler.settings.settings
         URLMANGLER_SECRETS_FILE: url_mangler/settings/.confidential/ci.json
-      run: poetry run pytest --cov . --cov-report=xml -n 2
+      run: poetry run pytest
 
-    - name: Upload coverage
+    - name: Upload Coverage to CodeCov
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
