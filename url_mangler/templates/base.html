@@ -1,0 +1,27 @@
+{% load static %}
+{% load bootstrap4 %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% bootstrap_css %}
+    {% block extra_css %}
+    {% endblock extra_css %}
+
+    <title>url mangler</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+</head>
+<body>
+    {% block content %}
+    {% endblock content %}
+
+    {% bootstrap_javascript jquery='full' %}
+    {% block extra_js%}
+    {% endblock extra_js%}
+
+    {% block scripts %}
+    {% endblock scripts %}
+</body>
+</html>

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+<p></p>
+<div class="container-fluid">
+    <div class="row d-flex justify-content-center">
+        <center><h2>url mangler</h2></center>
+    </div>
+    <div class="row d-flex justify-content-center">
+        <div class="col-xs-6">
+            {% for message in messages %}
+                <div class="{{ message|bootstrap_message_classes }} alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&#215;</button>
+                    {{ message|safe }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-6">
+            <form method="post">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in form.visible_fields %}
+                    {% bootstrap_field field show_label=False placeholder="http://neverssl.com" %}
+                {% endfor %}
+                <center>{% bootstrap_button "Create" button_type="submit" button_class="btn-success col-5" %}</center>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
