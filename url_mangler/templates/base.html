@@ -1,0 +1,46 @@
+{% load static %}
+{% load bootstrap4 %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% bootstrap_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    {% block extra_css %}
+    {% endblock extra_css %}
+
+    <title>url mangler</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+</head>
+<body>
+    <div id="wrap">
+        {% block content %}
+        {% endblock content %}
+
+        <footer class="fineprint">
+            <div class="container-fluid">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-6">
+                        <p>Created by <a href="https://github.com/rmartin16/url-mangler">Russell Martin</a></p>
+                        Intended for entertainment use only. No guarantees made.
+                        No one endorses anything contained in the URLs.
+                        url mangler is not responsible for any content linked through its service.
+                        Use at your own risk.
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    {% bootstrap_javascript jquery='full' %}
+    {% block extra_js%}
+    {% endblock extra_js%}
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    {% block scripts %}
+    {% endblock scripts %}
+</body>
+</html>
