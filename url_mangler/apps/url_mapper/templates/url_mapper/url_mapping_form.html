@@ -1,7 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
 {% load bootstrap4 %}
 
 {% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'url_mapper/css/url_mapper.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
@@ -12,27 +14,46 @@
     </div>
     <div class="row d-flex justify-content-center">
         <div class="col-xs-6">
-            {% for message in messages %}
-                <div class="{{ message|bootstrap_message_classes }} alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&#215;</button>
-                    {{ message|safe }}
-                </div>
-            {% endfor %}
+            {% bootstrap_messages %}
         </div>
     </div>
     <div class="row d-flex justify-content-center">
         <div class="col-lg-6">
-            <form method="post">
+            <form id="id_destination_url_form" method="post">
                 {% csrf_token %}
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}
                 {% endfor %}
                 {% for field in form.visible_fields %}
-                    {% bootstrap_field field show_label=False placeholder="http://neverssl.com" %}
+                    {% bootstrap_field field show_label=False field_class="url-input" placeholder="http://example.com" %}
                 {% endfor %}
-                <center>{% bootstrap_button "Create" button_type="submit" button_class="btn-success col-5" %}</center>
+                <center>
+                    <button type="submit" class="btn btn-success col-4 g-recaptcha"
+                        data-sitekey="6LeO5t0ZAAAAAGe4fUzUOpJ-2X38M2AjlTAGTp1r" data-callback="onUrlSubmit" data-action="submit">
+                    Mangle</button>
+                </center>
             </form>
         </div>
     </div>
+    {% if destination_url %}
+    <p></p><p></p><p></p>
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-8 results">
+            <div id="id_slug_url">
+                <a href="{{ slug_url }}">{{slug_url_label}}</a>
+            </div>
+            <div id="id_down_arrow">
+                &#8595;
+            </div>
+            <div id="id_destination_url" class="normal-text">
+                <a class="normal-text" href="{{ destination_url }}">{{ destination_url }}</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'url_mapper/js/url_mapper.js' %}"></script>
 {% endblock %}

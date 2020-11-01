@@ -1,6 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import redirect, reverse, render
-from django.views.generic.base import RedirectView
+from django.shortcuts import redirect, reverse
 from django.views.generic.edit import FormView
 
 from url_mangler.apps.url_mapper.forms import UrlMappingForm
@@ -8,46 +7,66 @@ from url_mangler.apps.url_mapper.uses import GenerateAndSaveSlugMappingUseCase
 from url_mangler.apps.url_mapper.uses import RetrieveSlugMappingUseCase
 
 
-class SlugRedirectView(RedirectView):
-    """Redirect aliased URL to destination URL"""
-
-    is_permanent = False
-
-    def get_redirect_url(self, slug: str, *args, **kwargs):
-        if record := RetrieveSlugMappingUseCase().retrieve(slug=slug):
-            return record.destination_url
-
-        # upon failure, redirect to the homepage with an error
-        messages.error(
-            self.request,
-            f'Whoops!! the URL "{self.request.build_absolute_uri()}" isn\'t redirected anywhere...',
-            extra_tags="safe",
-        )
-        return redirect("url_mapper:create_slug").url
-
-
 class CreateSlugView(FormView):
     form_class = UrlMappingForm
     template_name = "url_mapper/url_mapping_form.html"
 
-    def get_success_url(self):
-        return reverse("url_mapper:create_slug")
+    def get(self, request, *args, **kwargs):
+        """Handle GET requests. All GET requests are funneled through here."""
+
+        # redirect to the destination URL if valid slug
+        failed_to_find_slug = False
+        if slug := kwargs.get("slug", None):
+            if mapping := RetrieveSlugMappingUseCase().retrieve(slug=slug):
+                # TODO: perhaps log redirections
+                return redirect(mapping.destination_url, permanent=False)
+            else:
+                failed_to_find_slug = True
+
+        # if a slug wasn't found or if a non-slug path was provided, send error to user
+        if failed_to_find_slug or request.path:
+            messages.error(
+                self.request,
+                f"Whoops!! That address isn't currently redirected anywhere...",
+            )
+
+        # render homepage
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        """Load form and other data in to context for homepage."""
+        context = super().get_context_data(**kwargs)
+
+        # if a mapping was successfully created, pass to template
+        if dest_url := self.request.session.get("destination_url"):
+            context["destination_url"] = dest_url
+            context["slug_url"] = self.request.session["slug_url"]
+            context["slug_url_label"] = (
+                context["slug_url"].lstrip("http://").lstrip("https://")
+            )
+
+        # clear session cache to prevent any bleeding
+        self.request.session.pop("destination_url", None)
+        self.request.session.pop("slug_url", None)
+
+        return context
 
     def form_valid(self, form: UrlMappingForm):
-        slug_url = form.cleaned_data["destination_url"]
+        """Create a new mapping and return it to the user"""
+        dest_url = form.cleaned_data["destination_url"]
         try:
             mapping = GenerateAndSaveSlugMappingUseCase().save(
-                destination_mapping=slug_url
-            )
-            # use the domain information of the current request to build the mangled URL for the user
-            slug_url = self.request.build_absolute_uri(
-                reverse("url_mapper:slug_redirect", args=(mapping.slug,))
-            )
-            messages.success(
-                self.request, f"Your mangled URL: {slug_url}", extra_tags="safe"
+                destination_mapping=dest_url
             )
         except Exception as e:
-            messages.error(f"Failed to mangle URL... Error: {repr(e)}")
-        return render(
-            self.request, self.template_name, context=dict(form=self.form_class())
-        )
+            messages.error(self.request, f"Failed to mangle URL... Error: {repr(e)}")
+        else:
+            # use the domain information of the current request to build the mangled URL for the user
+            slug_url: str = self.request.build_absolute_uri(
+                reverse("url_mapper:slug_redirect", args=(mapping.slug,))
+            )
+            # preserve urls to display to user after submit
+            self.request.session["destination_url"] = dest_url
+            self.request.session["slug_url"] = slug_url
+
+        return redirect("url_mapper:create_slug")

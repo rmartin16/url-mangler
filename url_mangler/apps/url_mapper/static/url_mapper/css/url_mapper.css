@@ -1,0 +1,29 @@
+
+.url-input {
+    color:#000000;
+}
+
+.results {
+    text-align: center;
+}
+
+#id_slug_url {
+    font-size: 200%;
+}
+
+/* improve word wrapping for especially long destination urls */
+#id_destination_url {
+    font-size: 125%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+.normal-text {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+#id_down_arrow {
+    font-size: 600%;
+}
