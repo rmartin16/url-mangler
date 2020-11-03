@@ -23,6 +23,7 @@ confidential = SecretsManager(
     secrets_file=environ.get("URLMANGLER_SECRETS_FILE"),
     region_name="us-east-1",
 )
+print(f"{vars(confidential)=}")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
