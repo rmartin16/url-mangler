@@ -1,4 +1,9 @@
 
+.title {
+    font-size: 800%;
+    text-align: center;
+}
+
 .url-input {
     color:#000000;
 }

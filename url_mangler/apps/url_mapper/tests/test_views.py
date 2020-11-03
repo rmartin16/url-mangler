@@ -37,16 +37,19 @@ def test_get_catch_all(client):
 
 
 @pytest.mark.django_db
-def test_submitting_mapping(client):
+@pytest.mark.parametrize("secure", (True, False))
+def test_submitting_mapping(client, secure):
     resp = client.get(urls.reverse("url_mapper:homepage"))
     soup = BeautifulSoup(resp.content, "html.parser")
 
     csrf = soup.find("input", {"name": "csrfmiddlewaretoken"})["value"]
 
+    # alternative secure to test stripping the schema for both http and https
     resp = client.post(
         urls.reverse("url_mapper:homepage"),
         data={"csrfmiddlewaretoken": csrf, "destination_url": url},
         follow=True,
+        secure=secure,
     )
     assert resp.status_code == 200
     soup = BeautifulSoup(resp.content, "html.parser")
