@@ -1,8 +1,9 @@
 # url-mangler
-url shortener of sorts
 
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/rmartin16/url-mangler/Python%20Checks/master?style=flat-square)
 ![Codecov](https://img.shields.io/codecov/c/gh/rmartin16/url-mangler?style=flat-square)
+
+url shortener of sorts. try it at [s.rjm.sh](https://s.rjm.sh).
 
 ## Purpose
 The project primarily facilitated hands-on learning and experience with several technologies and concepts. The "usefulness" of the end product was second priority. 
