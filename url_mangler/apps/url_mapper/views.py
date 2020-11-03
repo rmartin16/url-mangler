@@ -38,9 +38,12 @@ class CreateSlugView(FormView):
         if dest_url := self.request.session.get("destination_url"):
             context["destination_url"] = dest_url
             context["slug_url"] = self.request.session["slug_url"]
-            context["slug_url_label"] = (
-                context["slug_url"].lstrip("http://").lstrip("https://")
-            )
+            if context["slug_url"].startswith("http://"):
+                context["slug_url_label"] = context["slug_url"][7:]
+            elif context["slug_url"].startswith("https://"):
+                context["slug_url_label"] = context["slug_url"][8:]
+            else:
+                context["slug_url_label"] = context["slug_url"]
 
         # clear session cache to prevent any bleeding
         self.request.session.pop("destination_url", None)
