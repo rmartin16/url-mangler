@@ -15,8 +15,6 @@ from os import environ
 
 from confidential import SecretsManager
 
-# from url_mangler.settings import apps_settings
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -34,8 +32,6 @@ DEBUG = confidential["DEBUG"]
 ALLOWED_HOSTS = confidential["ALLOWED_HOSTS"]
 
 # Application definition
-# apps_settings.configure_dependency_injections()
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
