@@ -15,16 +15,13 @@ class CreateSlugView(FormView):
         """Handle GET requests. All GET requests are funneled through here."""
 
         # redirect to the destination URL if valid slug
-        failed_to_find_slug = False
         if slug := kwargs.get("slug", None):
             if mapping := RetrieveSlugMappingUseCase().retrieve(slug=slug):
                 # TODO: perhaps log redirections
                 return redirect(mapping.destination_url, permanent=False)
-            else:
-                failed_to_find_slug = True
 
         # if a slug wasn't found or if a non-slug path was provided, send error to user
-        if failed_to_find_slug or request.path:
+        if request.path.rstrip("/"):
             messages.error(
                 self.request,
                 f"Whoops!! That address isn't currently redirected anywhere...",
@@ -69,4 +66,4 @@ class CreateSlugView(FormView):
             self.request.session["destination_url"] = dest_url
             self.request.session["slug_url"] = slug_url
 
-        return redirect("url_mapper:create_slug")
+        return redirect("url_mapper:homepage")

@@ -15,8 +15,6 @@ from os import environ
 
 from confidential import SecretsManager
 
-# from url_mangler.settings import apps_settings
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,6 +23,7 @@ confidential = SecretsManager(
     secrets_file=environ.get("URLMANGLER_SECRETS_FILE"),
     region_name="us-east-1",
 )
+print(f"{vars(confidential)=}")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -34,8 +33,6 @@ DEBUG = confidential["DEBUG"]
 ALLOWED_HOSTS = confidential["ALLOWED_HOSTS"]
 
 # Application definition
-# apps_settings.configure_dependency_injections()
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",

@@ -1,0 +1,5 @@
+[run]
+omit =
+    */test_*.py
+    url_mangler/settings/asgi.py
+    url_mangler/settings/wsgi.py

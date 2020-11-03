@@ -73,7 +73,7 @@ class DjangoSlugMappingRepo(SlugMappingRepo):
     def generate_slug(cls, destination_mapping: str) -> str:
         """Generate a slug for a destination mapping."""
         while 1:
-            slug = slugify(get_random_string().lower())
+            slug = slugify(get_random_string(length=12).lower())
             if not UrlMapping.objects.filter(slug=slug).exists():
                 break
         return slug
