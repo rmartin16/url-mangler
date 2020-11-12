@@ -1,7 +1,10 @@
+from requests import post
+
 from django.contrib import messages
 from django.shortcuts import redirect, reverse
 from django.views.generic.edit import FormView
 
+from url_mangler.settings.settings import confidential, DEBUG
 from url_mangler.apps.url_mapper.forms import UrlMappingForm
 from url_mangler.apps.url_mapper.uses import GenerateAndSaveSlugMappingUseCase
 from url_mangler.apps.url_mapper.uses import RetrieveSlugMappingUseCase
@@ -51,6 +54,13 @@ class CreateSlugView(FormView):
 
         return context
 
+    def post(self, request, *args, **kwargs):
+        if self.check_recaptcha():
+            return super().post(request, *args, **kwargs)
+        else:
+            messages.error(request, "Failed reCAPTCHA check...")
+            return redirect(reverse("url_mapper:homepage"))
+
     def form_valid(self, form: UrlMappingForm):
         """Create a new mapping and return it to the user"""
         dest_url = form.cleaned_data["destination_url"]
@@ -70,3 +80,26 @@ class CreateSlugView(FormView):
             self.request.session["slug_url"] = slug_url
 
         return redirect("url_mapper:homepage")
+
+    def check_recaptcha(self):
+        """Return True if user passed transparent reCAPTCHA"""
+        if DEBUG:
+            return True
+        elif recaptcha_response := self.request.POST.get("g-recaptcha-response"):
+            try:
+                r = post(
+                    "https://www.google.com/recaptcha/api/siteverify",
+                    data={
+                        "secret": confidential["RECAPTCHA_KEY"],
+                        "response": recaptcha_response,
+                    },
+                ).json()
+            except Exception as e:
+                print(f"Failed reCAPTCHA check: {repr(e)}")
+                return False
+            else:
+                if success := r.get("success", False):
+                    return success
+                else:
+                    print(f"Failed reCAPTCHA check: {r.get('error-codes')}")
+        return False
