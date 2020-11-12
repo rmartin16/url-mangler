@@ -1,5 +1,7 @@
 {
   "SECRET_KEY": "^gh4f#05w#!0w+9)fkc(xpz8mj$rprjawlt27i__t*yb#d8noq",
+  "RECAPTCHA_KEY": "6LcCT-IZAAAAAHutYbA6cYzJFmokX6AbEokYhIfq",
+  "RECAPTCHA_SITE": "6LcCT-IZAAAAANOXjIkW13cvhg9fl1mB6d5E_Yht",
   "ALLOWED_HOSTS": ["*"],
   "DEBUG": true,
   "DATABASE": {

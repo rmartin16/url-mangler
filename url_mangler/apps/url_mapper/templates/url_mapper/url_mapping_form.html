@@ -29,7 +29,7 @@
                 {% endfor %}
                 <div style="text-align: center;">
                     <button type="submit" class="btn btn-success col-4 g-recaptcha"
-                        data-sitekey="6LeO5t0ZAAAAAGe4fUzUOpJ-2X38M2AjlTAGTp1r" data-callback="onUrlSubmit" data-action="submit">
+                        data-sitekey="{{ recaptcha_site_key }}" data-callback="onUrlSubmit" data-action="submit">
                     Mangle</button>
                 </div>
             </form>

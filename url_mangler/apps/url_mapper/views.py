@@ -37,6 +37,8 @@ class CreateSlugView(FormView):
         """Load form and other data in to context for homepage."""
         context = super().get_context_data(**kwargs)
 
+        context["recaptcha_site_key"] = confidential["RECAPTCHA_SITE"]
+
         # if a mapping was successfully created, pass to template
         if dest_url := self.request.session.get("destination_url"):
             context["destination_url"] = dest_url
