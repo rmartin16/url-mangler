@@ -27,11 +27,11 @@
                 {% for field in form.visible_fields %}
                     {% bootstrap_field field show_label=False field_class="url-input" placeholder="http://example.com" %}
                 {% endfor %}
-                <center>
+                <div style="text-align: center;">
                     <button type="submit" class="btn btn-success col-4 g-recaptcha"
                         data-sitekey="6LeO5t0ZAAAAAGe4fUzUOpJ-2X38M2AjlTAGTp1r" data-callback="onUrlSubmit" data-action="submit">
                     Mangle</button>
-                </center>
+                </div>
             </form>
         </div>
     </div>
@@ -55,5 +55,6 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="{% static 'url_mapper/js/url_mapper.js' %}"></script>
 {% endblock %}

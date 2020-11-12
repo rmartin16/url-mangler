@@ -30,8 +30,8 @@ confidential = SecretsManager(
 SECRET_KEY = confidential["SECRET_KEY"]
 DEBUG = confidential["DEBUG"] or False
 ALLOWED_HOSTS = confidential["ALLOWED_HOSTS"]
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 
 # Application definition
 INSTALLED_APPS = [
