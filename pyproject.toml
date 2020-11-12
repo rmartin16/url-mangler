@@ -16,6 +16,7 @@ Inject = "^4.3.1"
 django-bootstrap4 = "^2.3.1"
 uWSGI = "^2.0.19"
 requests = "^2.25.0"
+urllib3 = ">=1.25.11,<1.26"  # needed to help resolve conflicts between botocore and requests
 
 [tool.poetry.dev-dependencies]
 black = "^20.8b1"
